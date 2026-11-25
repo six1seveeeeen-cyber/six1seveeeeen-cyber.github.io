@@ -1,12 +1,170 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Мой сайт</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School 43 Hack</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Share+Tech+Mono&family=Creepster&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #f0f2f5; color: #333; font-family: 'Montserrat', sans-serif; height: 100vh; display: flex; justify-content: center; align-items: center; overflow: hidden; transition: background 1s ease; }
+.screen { display: none; flex-direction: column; align-items: center; text-align: center; width: 90%; max-width: 400px; z-index: 10; }
+.active { display: flex; }
+.input-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; }
+h1 { font-size: 1.5rem; margin-bottom: 20px; color: #111; }
+input { width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 12px; font-size: 1.2rem; text-align: center; outline: none; transition: 0.3s; }
+input:focus { border-color: #007bff; }
+button { width: 100%; padding: 15px; margin-top: 20px; background: #007bff; color: white; border: none; border-radius: 12px; font-size: 1.1rem; font-weight: bold; cursor: pointer; transition: 0.2s; }
+button:hover { background: #0056b3; }
+.grades-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); width: 100%; }
+.grades-title { font-size: 1.2rem; color: #666; margin-bottom: 15px; }
+.grades-list { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.grade { background: #e8f5e9; color: #2e7d32; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 50%; font-weight: bold; font-size: 1.2rem; animation: pop 0.5s ease-out; }
+.grade.bad { background: #ffebee; color: #c62828; }
+@keyframes pop { 0% { transform: scale(0); } 80% { transform: scale(1.2); } 100% { transform: scale(1); } }
+.hack-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; color: #0f0; font-family: 'Share Tech Mono', monospace; display: none; flex-direction: column; padding: 20px; z-index: 100; }
+.terminal-text { font-size: 1rem; line-height: 1.5; margin-bottom: 10px; }
+.progress-container { margin: 15px 0; }
+.progress-label { margin-bottom: 5px; font-size: 0.9rem; color: #0f0; }
+.progress-bar { width: 100%; height: 15px; border: 1px solid #0f0; position: relative; }
+.progress-fill { height: 100%; background: #0f0; width: 0%; }
+.progress-text { position: absolute; top: -20px; right: 0; font-size: 0.9rem; }
+.win-error { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0.8); background: #f0f0f0; border: 2px solid #999; box-shadow: 0 20px 50px rgba(0,0,0,0.8); color: #000; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; width: 90vw; height: 80vh; z-index: 200; display: none; flex-direction: column; opacity: 0; transition: all 0.5s ease; }
+.win-header { background: #0078D7; color: white; padding: 10px 15px; font-weight: bold; display: flex; justify-content: space-between; font-size: 1.2rem; }
+.win-body { padding: 40px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; flex: 1; gap: 20px; }
+.win-icon { color: #d32f2f; font-size: 80px; }
+.win-text { font-size: 1.5rem; font-weight: bold; color: #333; }
+.win-subtext { font-size: 1rem; color: #666; }
+.horror-screen { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: none; justify-content: center; align-items: center; z-index: 500; text-align: center; padding: 20px; flex-direction: column; }
+.dot-matrix { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; opacity: 0.3; background-image: radial-gradient(#f00 1px, transparent 1px), radial-gradient(#f00 1px, transparent 1px); background-size: 20px 20px; background-position: 0 0, 10px 10px; mask-image: radial-gradient(circle, black 40%, transparent 70%); -webkit-mask-image: radial-gradient(circle, black 40%, transparent 70%); }
+.killer-silhouette { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 300px; height: 400px; z-index: 2; background: radial-gradient(circle at 50% 20%, #f00 30px, transparent 31px), radial-gradient(ellipse at 50% 60%, #f00 80px, transparent 81px), linear-gradient(45deg, transparent 40%, #f00 45%, #f00 50%, transparent 55%); filter: blur(2px) drop-shadow(0 0 15px red); }
+.wait-text { font-family: 'Creepster', cursive; color: #f00; font-size: 4rem; text-transform: uppercase; line-height: 1.2; text-shadow: 0 0 20px red, 0 0 40px darkred; z-index: 10; position: relative; letter-spacing: 5px; }
+</style>
 </head>
-<body style="background:#111;color:#0f0;font-family:monospace;text-align:center;padding-top:30vh">
-  <h1>Hello cloude</h1>
-  <p>Это мой первый сайт</p>
+<body>
+<div class="screen active" id="screen-input">
+<div class="input-card">
+<h1>Введите номер школы</h1>
+<input type="number" id="schoolNum" autocomplete="off">
+<button onclick="checkSchool()">Войти</button>
+</div>
+</div>
+<div class="screen" id="screen-grades">
+<div class="grades-card">
+<div class="grades-title">Ваши оценки за четверть:</div>
+<div class="grades-list" id="grades-container"></div>
+</div>
+</div>
+<div class="hack-container" id="screen-hack">
+<div id="terminal-output"></div>
+<div id="progress-area"></div>
+</div>
+<div class="win-error" id="win-error">
+<div class="win-header">System Error <span>X</span></div>
+<div class="win-body">
+<div class="win-icon">⚠️</div>
+<div class="win-text">КРИТИЧЕСКАЯ ОШИБКА</div>
+<div class="win-subtext">Сбой доступа к системе школы 43.<br>Попытка перехвата данных...</div>
+</div>
+</div>
+<div class="horror-screen" id="screen-horror">
+<div class="dot-matrix"></div>
+<div class="killer-silhouette"></div>
+<div class="wait-text">8 'B' ОЖИДАЙТЕ</div>
+</div>
+<script>
+function checkSchool() {
+const num = document.getElementById('schoolNum').value;
+if (num === "43") {
+document.getElementById('screen-input').classList.remove('active');
+showGrades();
+} else {
+document.getElementById('schoolNum').style.borderColor = "red";
+setTimeout(() => document.getElementById('schoolNum').style.borderColor = "#e0e0e0", 1000);
+}
+}
+document.getElementById('schoolNum').addEventListener('keypress', function(e) { if (e.key === 'Enter') checkSchool(); });
+function sleep(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+async function showGrades() {
+document.getElementById('screen-grades').classList.add('active');
+const grades = [5, 4, 5, 3, 4, 5, 5, 2];
+const container = document.getElementById('grades-container');
+for (let i = 0; i < grades.length; i++) {
+await sleep(300);
+const div = document.createElement('div');
+div.className = 'grade ' + (grades[i] <= 3 ? 'bad' : '');
+div.textContent = grades[i];
+container.appendChild(div);
+}
+await sleep(2000);
+startErrorPhase();
+}
+async function startErrorPhase() {
+document.body.style.background = "#000";
+document.getElementById('screen-grades').classList.remove('active');
+const errorWindow = document.getElementById('win-error');
+errorWindow.style.display = "flex";
+setTimeout(() => { errorWindow.style.opacity = "1"; errorWindow.style.transform = "translate(-50%, -50%) scale(1)"; }, 100);
+await sleep(3000);
+errorWindow.style.opacity = "0"; errorWindow.style.transform = "translate(-50%, -50%) scale(1.1)";
+await sleep(500);
+errorWindow.style.display = "none";
+startHack();
+}
+const terminal = document.getElementById('terminal-output');
+const progressArea = document.getElementById('progress-area');
+async function startHack() {
+document.getElementById('screen-hack').style.display = "flex";
+await typeLine("> ПОПЫТКА ВЗЛОМА СЕРВЕРА ШКОЛЫ №43...", 1000);
+await typeLine("> СЕРВЕР ЗАЩИЩЕН. ОШИБКА 403", 1000);
+await typeLine("> ОБХОД ЗАЩИТЫ...", 1000);
+await typeLine("> СЕРВЕР НЕ СМОГ ОТРАЗИТЬ АТАКУ", 1000);
+await typeLine("> ЗАПУСК DDOS-АТАКИ...", 500);
+await runProgress("DDOS АТАКА", 100, 3000);
+await typeLine("> САЙТ ЗАХВАЧЕН", 500);
+await typeLine("> ЗАГРУЗКА ДАННЫХ...", 500);
+await runProgress("ЗАГРУЗКА ДАННЫХ", 100, 2000);
+await typeLine("> ДАННЫЕ ПОЛУЧЕНЫ", 500);
+await typeLine("> ПРОШИВКА ТЕЛЕФОНА...", 500);
+await runProgress("ПРОШИВКА ТЕЛЕФОНА", 100, 3000);
+await sleep(500);
+document.getElementById('screen-hack').style.display = "none";
+showHorror();
+}
+function typeLine(text, duration) {
+return new Promise(async (resolve) => {
+const p = document.createElement('div');
+p.className = 'terminal-text';
+terminal.appendChild(p);
+for (let i = 0; i < text.length; i++) {
+p.textContent += text.charAt(i);
+await sleep(duration / text.length);
+}
+resolve();
+});
+}
+function runProgress(label, max, duration) {
+return new Promise((resolve) => {
+const container = document.createElement('div');
+container.className = 'progress-container';
+container.innerHTML = <div class="progress-label"&gt;${label}</div><div class="progress-bar"><div class="progress-fill" id="fill-${label}"&gt;&lt;/div&gt;&lt;div class="progress-text" id="text-${label}">0%</div></div>; progressArea.appendChild(container); const fill = document.getElementById(fill-${label});
+const text = document.getElementById(text-${label});
+let current = 0;
+const stepTime = duration / max;
+const timer = setInterval(() => {
+current++;
+if (current > max) current = max;
+fill.style.width = current + "%";
+text.textContent = current + "%";
+if (current >= max) { clearInterval(timer); resolve(); }
+}, stepTime);
+});
+}
+function showHorror() {
+const horrorScreen = document.getElementById('screen-horror');
+horrorScreen.style.display = "flex";
+document.body.style.background = "radial-gradient(circle, #300 0%, #000 100%)";
+}
+</script>
 </body>
 </html>
